@@ -161,3 +161,6 @@ cython_debug/
 
 Pipfile
 Pipfile.lock
+
+src/task/evans-class-c67887cf1aed.json
+apikey.txt
