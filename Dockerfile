@@ -1,4 +1,4 @@
-FROM --platform=linux/386 python:3.12-slim-bullseye
+FROM --platform=linux/amd64 python:3.12-slim-bullseye
 
 ENV TZ=Asia/Taipei
 
