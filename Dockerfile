@@ -4,6 +4,8 @@ ENV TZ=Asia/Taipei
 
 COPY requirements.txt requirements.txt
 COPY ./src/ app/src/
+COPY ~/.ssh/known_hosts /root/.ssh/known_hosts
+
 
 RUN apt-get update && \
     apt-get install git zsh vim curl wget zip procps gcc python3-dev -y && \
