@@ -163,4 +163,4 @@ Pipfile
 Pipfile.lock
 src/task/*.json
 apikey.txt
-
+./.ssh/*

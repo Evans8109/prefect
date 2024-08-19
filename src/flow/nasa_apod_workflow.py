@@ -32,8 +32,8 @@ if __name__ == "__main__":
         # parameters=dict(name="Marvin"),
         cron="*/5 * * * *"
     )
-    start_date = "2024-08-19"
-    end_date = "2024-08-19"
+    start_date = "2024-08-18"
+    end_date = "2024-08-18"
     bucket_name = 'tir102_apod'
 
 

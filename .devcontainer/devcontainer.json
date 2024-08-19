@@ -39,11 +39,11 @@
     "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/root/.gitconfig_mounted,type=bind,consistency=cached"
   ],
   "remoteEnv": {
-    "PYTHONPATH": "/workspaces/prefect-demo/src"
+    "PYTHONPATH": "/workspaces/prefect/src"
   },
   "postCreateCommand": "sh ./.devcontainer/postCreateCommand.sh",
   "runArgs": [
     "--name",
-    "prefect-demo"
+    "prefect"
   ]
 }
