@@ -1,6 +1,7 @@
 from prefect import task
 from google.cloud import storage
 from google.oauth2 import service_account
+from prefect.blocks.system import Secret
 import json
 import requests
 import mimetypes
@@ -8,15 +9,24 @@ import re
 
 @task
 def upload_to_gcs(json_file_name, bucket_name):
-    # 加載服務帳戶憑證
-    credentials = service_account.Credentials.from_service_account_file(
-        '/usr/local/prefect/src/task/evans-class-c67887cf1aed.json'
-    )
+    # 从 Prefect Secret 中加载服务账户凭证 JSON 字符串
+    secret_block = Secret.load("gcs-key")
+    service_account_json = secret_block.get()  # 获取 Secret 的值
+    
+    # 解析 JSON 字符串为字典
+    credentials_dict = json.loads(service_account_json)
+    
+    # 创建服务账户凭证对象
+    credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+    
+    # 创建 Google Cloud Storage 客户端
     storage_client = storage.Client(credentials=credentials)
-
+    
+    # 读取要上传的文件内容
     with open(json_file_name, 'r') as file:
         data = json.load(file)
-
+    
+    # 获取目标 Bucket
     bucket = storage_client.bucket(bucket_name)
 
     for item in data:
