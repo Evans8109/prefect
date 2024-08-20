@@ -13,7 +13,7 @@ def nasa_apod_workflow(api_key, start_date, end_date, bucket_name):
     upload_to_gcs(json_file_name, bucket_name)
 
 if __name__ == "__main__":
-    with open('/app/src/apikey.txt', 'r') as file:
+    with open('/usr/local/prefect/src/apikey.txt', 'r') as file:
         api_key = file.read().strip()
 
 #   docker_container = DockerContainer(
@@ -23,14 +23,14 @@ if __name__ == "__main__":
 
     nasa_apod_workflow.from_source(
         source=GitHubRepository.load("prefect"),
-        entrypoint="/app/src/flow/nasa_apod_workflow.py:nasa_apod_workflow",
+        entrypoint="/usr/local/prefect/src/flow/nasa_apod_workflow.py:nasa_apod_workflow",
     ).deploy(
         name="docker-deploy",
         tags=["test", "prefect"],
         work_pool_name="docker",
         job_variables=dict(pull_policy="Never"),
         # parameters=dict(name="Marvin"),
-        cron="*/1 * * * *"
+        cron="*/5 * * * *"
     )
     start_date = "2024-08-18"
     end_date = "2024-08-18"
