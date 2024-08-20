@@ -1,6 +1,7 @@
 from prefect import task
+from prefect.blocks.system import Secret
+
 @task
-def read_api_key(file_path: str) -> str:
-    with open(file_path, 'r') as file:
-        api_key = file.read().strip()
-    return api_key
+def read_api_key():
+    secret_block = Secret.load("api-key")
+    return secret_block.get()
