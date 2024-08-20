@@ -23,13 +23,16 @@ if __name__ == "__main__":
         tags=["test", "prefect"],
         work_pool_name="docker",
         job_variables=dict(pull_policy="Never"),
-        # parameters=dict(name="Marvin"),
+        parameters=dict(
+            file_path='/usr/local/prefect/src/apikey.txt',
+            start_date="2024-08-18",
+            end_date="2024-08-20",
+            bucket_name='tir102_apod'
+        ),
         cron="*/1 * * * *"
     )
     file_path = '/usr/local/prefect/src/apikey.txt'
     start_date = "2024-08-18"
-    end_date = "2024-08-18"
+    end_date = "2024-08-20"
     bucket_name = 'tir102_apod'
-
-
     nasa_apod_workflow(file_path, start_date, end_date, bucket_name)
