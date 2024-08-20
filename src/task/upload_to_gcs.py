@@ -8,9 +8,9 @@ import re
 
 @task
 def upload_to_gcs(json_file_name, bucket_name):
-    # 加载服务账户凭证
+    # 加載服務帳戶憑證
     credentials = service_account.Credentials.from_service_account_file(
-        '/usr/local/prefect/src/task/evans-class-c67887cf1aed.json'
+        'src/task/evans-class-c67887cf1aed.json'
     )
     storage_client = storage.Client(credentials=credentials)
 
