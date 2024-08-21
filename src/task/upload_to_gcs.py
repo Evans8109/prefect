@@ -4,12 +4,11 @@ from google.oauth2 import service_account
 from prefect.blocks.system import Secret
 import json
 import requests
-import mimetypes
-import re
+import os
 
 @task
 def upload_to_gcs(json_file_name, bucket_name):
-    # gcp service account
+    
     secret_block = Secret.load("gcs-key")
     service_account_json = secret_block.get()
     
@@ -21,9 +20,13 @@ def upload_to_gcs(json_file_name, bucket_name):
     
     # 創建 gcp 客户端
     storage_client = storage.Client(credentials=credentials)
+
+    #定義路徑
+    directory = "src/crawler_data"
+    file_path = os.path.join(directory, json_file_name)
     
     # 讀取內容
-    with open(json_file_name, 'r') as file:
+    with open(file_path, 'r') as file:
         data = json.load(file)
     
     # 獲取bucket
@@ -34,7 +37,6 @@ def upload_to_gcs(json_file_name, bucket_name):
         filename = f"{item['date']}"
         media_type = item['media_type']
 
-        # 判斷 URL 是否為 video
         if media_type == 'video':
             filename += '.txt'
             content = f"Video URL: {url}"
@@ -43,12 +45,8 @@ def upload_to_gcs(json_file_name, bucket_name):
             try:
                 res = requests.get(url)
                 content = res.content
-                mime_type, _ = mimetypes.guess_type(url)
-
-                if mime_type and mime_type.startswith('image'):
-                    filename += '.jpg'
-                else:
-                    filename += '.bin'
+                filename += '.jpg'
+                mime_type = 'image/jpeg'
 
                 if res.status_code != 200:
                     raise Exception(f"Failed to download content from URL: {url}")
@@ -60,7 +58,7 @@ def upload_to_gcs(json_file_name, bucket_name):
         blob = bucket.blob(filename)
 
         try:
-            blob.upload_from_string(content, content_type=mime_type or 'application/octet-stream')
+            blob.upload_from_string(content, content_type=mime_type)
             print(f"File uploaded to {filename} in bucket {bucket_name}.")
         except Exception as e:
             print(f"Failed to upload {filename} to bucket {bucket_name}: {e}")
