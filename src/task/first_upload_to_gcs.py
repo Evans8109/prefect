@@ -32,33 +32,35 @@ def upload_to_gcs(json_file_name, bucket_name):
     for item in data:
         url = item['url']
         filename = f"{item['date']}"
-        media_type = item['media_type']
 
-        # 判斷 URL 是否為 video
-        if media_type == 'video':
+        # 判斷 URL 是否為 YouTube 
+        if re.match(r'https://www\.youtube\.com/embed/', url):
             filename += '.txt'
             content = f"Video URL: {url}"
             mime_type = 'text/plain'
-        elif media_type == 'image':
+        else:
             try:
                 res = requests.get(url)
                 content = res.content
                 mime_type, _ = mimetypes.guess_type(url)
 
-                if mime_type and mime_type.startswith('image'):
+                if mime_type and mime_type.startswith('video'):
+                    filename += '.mp4'
+                elif mime_type and mime_type.startswith('image'):
                     filename += '.jpg'
                 else:
-                    filename += '.bin'
+                    filename += '.bin' 
 
+                # Check if the request was successful
                 if res.status_code != 200:
                     raise Exception(f"Failed to download content from URL: {url}")
 
             except Exception as e:
                 print(f"Failed to handle URL {url}: {e}")
-                continue
+                continue  # Skip this item if there's an error
 
         blob = bucket.blob(filename)
-
+        
         try:
             blob.upload_from_string(content, content_type=mime_type or 'application/octet-stream')
             print(f"File uploaded to {filename} in bucket {bucket_name}.")
