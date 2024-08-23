@@ -6,6 +6,7 @@ from datetime import datetime
 from prefect import get_client
 from task.crawler_data import crawler_data
 from task.upload_to_gcs import upload_to_gcs
+from task.insert_to_db import insert_to_db
 from prefect_github.repository import GitHubRepository
 from task.read_api_key import read_api_key
 from prefect.blocks.system import Secret
@@ -15,6 +16,7 @@ def nasa_apod_workflow(bucket_name):
     today = datetime.now().strftime('%Y-%m-%d')
     api_key = read_api_key()
     json_file_name = crawler_data(api_key, today, today)
+#    insert_to_db(json_file_name)
     upload_to_gcs(json_file_name, bucket_name)
 
 def deploy_flow():
