@@ -19,7 +19,7 @@ def crawler_data(api_key, start_date, end_date):
     if response.status_code == 200:
         data = response.json()
         # Define the directory and file path
-        directory = "src/crawler_data"
+        directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'crawler_data'))
         # check the directory if it doesn't exist
         os.makedirs(directory, exist_ok=True)
         file_name = f'apod_data_{today}.json'
@@ -27,6 +27,6 @@ def crawler_data(api_key, start_date, end_date):
         with open(file_path, 'w') as json_file:
             json.dump(data, json_file, indent=2)
         print(f"資料已儲存為 {file_name}")
-        return file_name
+        return file_path
     else:
         raise Exception(f"Error fetching data: {response.status_code} - {response.text}")
