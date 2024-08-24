@@ -16,8 +16,10 @@ def nasa_apod_workflow(bucket_name):
     today = datetime.now().strftime('%Y-%m-%d')
     api_key = read_api_key()
     json_file_name = crawler_data(api_key, today, today)
-#    insert_to_db(json_file_name)
-    upload_to_gcs(json_file_name, bucket_name)
+    file_path = os.path.join("src", "crawler_data", json_file_name)
+    print(f"完整的檔案路徑: {file_path}")
+    insert_to_db(file_path)
+    upload_to_gcs(file_path, bucket_name)
 
 def deploy_flow():
     client = get_client()

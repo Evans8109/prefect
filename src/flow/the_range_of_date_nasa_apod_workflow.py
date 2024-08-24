@@ -19,7 +19,7 @@ def deploy_flow():
     client = get_client()
     flow = range_nasa_apod_workflow.from_source(
         source=GitHubRepository.load("prefect"),
-        entrypoint="src/flow/the_range_of _date_nasa_apod_workflow.py:nasa_apod_workflow",
+        entrypoint="src/flow/the_range_of_date_nasa_apod_workflow.py:range_nasa_apod_workflow",
     )
 
     flow.deploy(
