@@ -55,7 +55,7 @@ def insert_to_db(file_path):
     
     finally:
         try:
-            cursor.close()
+            cursor.close() 
         except:
             pass
         try:

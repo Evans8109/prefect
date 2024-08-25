@@ -7,6 +7,7 @@ from prefect import get_client
 from task.crawler_data import crawler_data
 from task.upload_to_gcs import upload_to_gcs
 from task.insert_to_db import insert_to_db
+from task.insert_to_bigquery import insert_to_bigquery
 from prefect_github.repository import GitHubRepository
 from task.read_api_key import read_api_key
 from prefect.blocks.system import Secret
@@ -18,7 +19,7 @@ def nasa_apod_workflow(bucket_name):
     json_file_name = crawler_data(api_key, today, today)
     file_path = os.path.join("src", "crawler_data", json_file_name)
     print(f"完整的檔案路徑: {file_path}")
-    insert_to_db(file_path)
+    insert_to_bigquery(file_path)
     upload_to_gcs(file_path, bucket_name)
 
 def deploy_flow():
