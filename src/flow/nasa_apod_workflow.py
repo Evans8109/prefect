@@ -6,11 +6,12 @@ from datetime import datetime
 from prefect import get_client
 from task.crawler_data import crawler_data
 from task.upload_to_gcs import upload_to_gcs
-from task.insert_to_db import insert_to_db
+#from task.insert_to_db import insert_to_db
 from task.insert_to_bigquery import insert_to_bigquery
 from prefect_github.repository import GitHubRepository
 from task.read_api_key import read_api_key
 from prefect.blocks.system import Secret
+from google.cloud import bigquery
 
 @flow
 def nasa_apod_workflow(bucket_name):

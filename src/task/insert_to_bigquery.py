@@ -39,11 +39,5 @@ def insert_to_bigquery(file_path):
     except json.JSONDecodeError as e:
         print(f"JSON 格式錯誤: {e}")
     
-    except bigquery.exceptions.GoogleCloudError as e:
-        print(f"BigQuery 錯誤: {e}")
-    
-    except Exception as e:
-        print(f"其他錯誤: {e}")
-
-# 示例用法：
-# insert_to_bigquery('xxx.json')
+    except Exception as e:  # 捕捉所有異常
+        print(f"發生錯誤: {e}")
