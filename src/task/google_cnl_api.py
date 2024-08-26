@@ -2,10 +2,12 @@ import statistics
 import requests
 import json
 from prefect import task
+from prefect.blocks.system import Secret
 
 @task
 def google_cnl_api(content_string):
-    api_key = "AIzaSyDoKtqqua5ZPs0A8_O9kFJW03xBXNmUbdg"
+    secret_block = Secret.load("google-cnl-api-key")
+    api_key = secret_block.get()
     # 定義請求的 URL 和 API 金鑰
     url = f"https://language.googleapis.com/v1/documents:analyzeEntities?key={api_key}"
     # 定義請求的標頭和數據
