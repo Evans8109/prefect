@@ -4,7 +4,7 @@ from google.cloud import bigquery
 from prefect import task
 
 @task
-def insert_to_bigquery(file_path):
+def insert_to_bigquery(file_path, tags_list):
     try:
         # 讀取文件
         with open(file_path, 'r') as file:
@@ -14,16 +14,21 @@ def insert_to_bigquery(file_path):
         record = data[0]
         date = record.get('date')
         title = record.get('title')
-        
+
+        if tags_list and isinstance(tags_list, list) and len(tags_list) > 0:
+            tags_list = tags_list[0]  # 取出內部列表
+        else:
+            tags_list = []
+
         # 建立 BigQuery 客戶端
         client = bigquery.Client()
 
         # 指定 BigQuery 表格 ID
-        table_id = "evans-class.prefect.prefect"  # 修改為你的項目 ID 和資料集名稱
+        table_id = "evans-class.prefect.prefect" 
 
         # 準備要插入的行
         rows_to_insert = [
-            {u"date": date, u"title": title}
+            {u"date": date, u"title": title, u"explanation": tags_list}
         ]
 
         # 插入數據到 BigQuery

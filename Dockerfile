@@ -18,7 +18,9 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt && \
     pip install google-cloud-storage && \
     pip install mysql-connector-python && \
-    pip install google-cloud-bigquery
+    pip install google-cloud-bigquery && \
+    pip install google-cloud-translate && \
+    pip install pandas
 
 # Prefect config
 RUN prefect config set PREFECT_LOGGING_LOG_PRINTS=True 
