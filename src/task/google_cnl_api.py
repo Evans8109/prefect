@@ -6,9 +6,9 @@ from prefect.blocks.system import Secret
 
 @task
 def google_cnl_api(content_string):
+    # 定義請求的 URL 和 API 金鑰
     secret_block = Secret.load("google-cnl-api-key")
     api_key = secret_block.get()
-    # 定義請求的 URL 和 API 金鑰
     url = f"https://language.googleapis.com/v1/documents:analyzeEntities?key={api_key}"
     # 定義請求的標頭和數據
     headers = {"Content-Type": "application/json"}
@@ -43,6 +43,6 @@ def google_cnl_api(content_string):
             # print(f'Salience: {salience}')
     #print("-------------------------------")
     #print(num_of_tags)
-    print([entity_names])
+    #print([entity_names])
     tags_list = [entity_names]
     return tags_list
