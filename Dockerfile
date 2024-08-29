@@ -5,7 +5,7 @@ ENV TZ=Asia/Taipei
 # 复制文件到容器中
 COPY requirements.txt requirements.txt
 COPY ./src /usr/local/prefect/src/
-COPY ./.ssh/ /root/.ssh/
+#COPY ./.ssh/ /root/.ssh/
 
 # 更新包列表并安装依赖
 RUN apt-get update && \
