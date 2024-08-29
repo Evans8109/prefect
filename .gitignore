@@ -161,6 +161,5 @@ cython_debug/
 
 Pipfile
 Pipfile.lock
-src/task/*.json
-apikey.txt
+src/crawler_data/*.json
 .ssh/*

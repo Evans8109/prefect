@@ -29,17 +29,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
+        run: |
+          DOCKER_BUILDKIT=1 docker build --ssh default=$SSH_PRIVATE_KEY -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
         env:
-          DOCKER_BUILDKIT: 1
-        secrets:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Post to Slack on Success
         if: success()
