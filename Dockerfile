@@ -31,4 +31,4 @@ RUN prefect config set PREFECT_LOGGING_LOG_PRINTS=True
 RUN prefect cloud login --key pnu_JUTq5fPlvneM1qIFqCl3EtwbMHjPqb3UP0te --workspace evans-chen/default
 
 #ENV PYTHONPATH="$PYTHONPATH:/app/src"
-ENV PYTHONPATH="$PYTHONPATH:/usr/local/prefect/" 
+ENV PYTHONPATH="$PYTHONPATH:/usr/local/prefect/"
