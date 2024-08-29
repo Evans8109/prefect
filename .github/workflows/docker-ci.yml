@@ -1,43 +1,40 @@
-name: Docker CI/CD
+name: Docker Build and Push
 
 on:
   push:
     branches:
       - main
     paths:
-      - Dockerfile
-
-env:
-  IMAGE_NAME: your-docker-image
-  IMAGE_TAG: latest
-
+      - 'Dockerfile'
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        run: |
-          DOCKER_BUILDKIT=1 docker buildx build --ssh default=$SSH_PRIVATE_KEY -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --push .
+    - name: Build Docker image
+      run: |
+        docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/evans8109/tir102-prefect:latest .
 
-      - name: Post to Slack on Success
-        if: success()
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Docker image successfully built and pushed!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Push Docker image
+      run: |
+        docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/evans8109/tir102-prefect:latest --push .

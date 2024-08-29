@@ -28,4 +28,4 @@ RUN prefect config set PREFECT_LOGGING_LOG_PRINTS=True
 RUN prefect cloud login --key pnu_JUTq5fPlvneM1qIFqCl3EtwbMHjPqb3UP0te --workspace evans-chen/default
 
 # 设置 Python 路径
-ENV PYTHONPATH="$PYTHONPATH:/usr/local/prefect/"
+ENV PYTHONPATH="$PYTHONPATH:/usr/local/prefect/" 
