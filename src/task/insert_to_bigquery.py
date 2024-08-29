@@ -6,7 +6,7 @@ from prefect.blocks.system import Secret
 from prefect import task
 
 @task
-def insert_to_bigquery(file_path, tags_list):
+def insert_to_bigquery(file_path):
     try:
         # 讀取文件
         with open(file_path, 'r') as file:
@@ -20,10 +20,10 @@ def insert_to_bigquery(file_path, tags_list):
         url = record.get('url')
         copyright = record.get('copyright')
 
-        if tags_list and isinstance(tags_list, list) and len(tags_list) > 0:
-            tags_list = tags_list[0]  # 取出內部列表
-        else:
-            tags_list = []
+#        if tags_list and isinstance(tags_list, list) and len(tags_list) > 0:
+#            tags_list = tags_list[0]  # 取出內部列表
+#        else:
+#            tags_list = []
         
         secret_block = Secret.load("bigquery-pord")
         secret_block = secret_block.get()

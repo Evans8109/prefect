@@ -9,6 +9,7 @@ from task.upload_to_gcs import upload_to_gcs
 from task.insert_to_bigquery import insert_to_bigquery
 from task.google_cnl_api import google_cnl_api
 from task.process_tags import process_tags
+from task.insert_to_tag import insert_to_tag
 from prefect_github.repository import GitHubRepository
 from task.read_api_key import read_api_key
 from prefect.blocks.system import Secret
@@ -20,13 +21,22 @@ def nasa_apod_workflow(bucket_name):
     api_key = read_api_key()
     json_file_name = crawler_data(api_key, today, today)
     file_path = os.path.join("src", "crawler_data", json_file_name)
+
     #upload to GCS
     upload_to_gcs(file_path, bucket_name)
+
     # process the tags
-    tags_list = process_tags(file_path)
-    print(f"Generated Tags: {tags_list}")
+    df_tags = process_tags(file_path)
+    print(f"Generated Tags: {df_tags}")
+
     # insert to BigQuery 
-    insert_to_bigquery(file_path, tags_list)
+    insert_to_bigquery(file_path)
+
+    # insert to tag
+#    insert_to_tag(df_tags)
+    table_id = "my-project.tir102-bigquery.tir102_apod.tags"
+    column_mapping = {'date': 'date_field', 'tags_en': 'tags_en_field', 'tags_zhTW': 'tags_zhTW_field'}
+    insert_to_tag(df_tags, table_id, column_mapping)
 
 def deploy_flow():
     client = get_client()

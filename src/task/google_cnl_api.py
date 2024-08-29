@@ -44,5 +44,5 @@ def google_cnl_api(content_string):
     #print("-------------------------------")
     #print(num_of_tags)
     #print([entity_names])
-    tags_list = [entity_names]
+    tags_list = entity_names
     return tags_list
