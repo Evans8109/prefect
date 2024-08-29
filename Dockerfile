@@ -22,6 +22,7 @@ RUN pip install --upgrade pip && \
     pip install google-cloud-translate && \
     pip install pandas
 
+
 # Prefect config
 RUN prefect config set PREFECT_LOGGING_LOG_PRINTS=True 
 RUN prefect cloud login --key pnu_JUTq5fPlvneM1qIFqCl3EtwbMHjPqb3UP0te --workspace evans-chen/default
