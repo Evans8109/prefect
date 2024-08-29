@@ -14,14 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker BuildKit
+      - name: Start SSH Agent
         run: |
+          eval "$(ssh-agent -s)"
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
+
+      - name: Set up Docker BuildKit
+        run: export DOCKER_BUILDKIT=1
 
       - name: Build and push Docker image
         env:
           DOCKER_BUILDKIT: 1
         run: |
-          docker build --ssh default -t your-dockerhub-username/your-image:latest .
+          docker build --ssh default -t evans8109/tir102-prefect:latest .
           echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-          docker push your-dockerhub-username/your-image:latest
+          docker push evans8109/tir102-prefect:latest
