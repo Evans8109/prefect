@@ -25,7 +25,7 @@ RUN pip install --upgrade pip && \
 
 # 启用 BuildKit 的 SSH 功能
 # 这里使用 ssh 密钥来访问私有存储库
-RUN --mount=type=ssh git clone git@github.com:your-repo/your-private-repo.git /some/dir
+RUN --mount=type=ssh git clone git@github.com:Evans8109/prefect.git /usr/local/prefect/
 # Prefect config
 RUN prefect config set PREFECT_LOGGING_LOG_PRINTS=True 
 RUN prefect cloud login --key pnu_JUTq5fPlvneM1qIFqCl3EtwbMHjPqb3UP0te --workspace evans-chen/default
