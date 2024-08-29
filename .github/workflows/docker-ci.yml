@@ -1,40 +1,27 @@
-name: Docker Build and Push
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'Dockerfile'
+      - Dockerfile
+
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker BuildKit
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
 
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Build Docker image
-      run: |
-        docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/evans8109/tir102-prefect:latest .
-
-    - name: Push Docker image
-      run: |
-        docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/evans8109/tir102-prefect:latest --push .
+      - name: Build and push Docker image
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker build --ssh default -t your-dockerhub-username/your-image:latest .
+          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          docker push your-dockerhub-username/your-image:latest
