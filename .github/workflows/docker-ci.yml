@@ -36,4 +36,4 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push evans8109/tir102-prefect:latest 
+          docker push evans8109/tir102-prefect:latest
