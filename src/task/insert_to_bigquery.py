@@ -21,6 +21,7 @@ def insert_to_bigquery(file_path):
         # 從 JSON 中提取數據
         date = record.get('date')
         media_type = record.get('media_type')
+        explanation = record.get('explanation')
         title = record.get('title')
         url = record.get('url')
         copyright = record.get('copyright')
@@ -40,7 +41,7 @@ def insert_to_bigquery(file_path):
             {
                 u"date": date, 
                 u"title": title, 
-#                u"explanation": tags_list, 
+                u"explanation": explanation,
                 u"media_type": media_type,
                 u"URL": url,
                 u"copyright": copyright
