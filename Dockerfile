@@ -5,8 +5,8 @@ ENV TZ=America/New_York
 COPY requirements.txt requirements.txt
 COPY ./src/ app/src/
 COPY ./src /usr/local/prefect/src/
-COPY ./.ssh/ /root/.ssh/
-COPY src/evans-class-4bf6237f9342.json /usr/local/prefect/src/
+#COPY ./.ssh/ /root/.ssh/
+#COPY src/evans-class-4bf6237f9342.json /usr/local/prefect/src/
 
 RUN apt-get update && \
     apt-get install git zsh vim curl wget zip procps gcc python3-dev -y && \
