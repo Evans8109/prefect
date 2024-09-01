@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy and Update Code on Server
         run: |
-          ssh -v -o StrictHostKeyChecking=no evans@35.236.187.167 << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no evans@34.80.226.130 << 'EOF'
             cd /usr/local/prefect
             git pull origin main
           EOF
