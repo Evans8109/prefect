@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 python:3.12-slim-bullseye
 ENV TZ=America/New_York
 
 COPY requirements.txt requirements.txt
-COPY ./src/ app/src/
+#COPY ./src/ app/src/
 COPY ./src /usr/local/prefect/src/
 #COPY ./.ssh/ /root/.ssh/
 #COPY src/evans-class-4bf6237f9342.json /usr/local/prefect/src/
@@ -12,7 +12,7 @@ RUN apt-get update && \
     apt-get install git zsh vim curl wget zip procps gcc python3-dev -y && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     mkdir -p /root/.ssh && chmod 700 /root/.ssh && \
-    chmod 600 /root/.ssh/id_rsa && \
+    #chmod 600 /root/.ssh/id_rsa && \
     export GOOGLE_APPLICATION_CREDENTIALS="./src/evans-class-4bf6237f9342.json" && \
     echo "Y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
