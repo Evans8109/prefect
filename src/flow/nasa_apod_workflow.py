@@ -51,13 +51,13 @@ def deploy_flow():
 
     flow.deploy(
         name="docker-deploy",
-        tags=["test", "prefect"],
+        tags=["prod", "prefect"],
         work_pool_name="docker",
         job_variables=dict(pull_policy="Never"),
         parameters=dict(
             bucket_name='tir102_apod'
         ),
-        cron="*/5 * * * *"
+        cron="0 5 * * *"
     )
 
 if __name__ == "__main__":
