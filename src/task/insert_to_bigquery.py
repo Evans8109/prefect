@@ -20,11 +20,6 @@ def insert_to_bigquery(file_path):
         url = record.get('url')
         copyright = record.get('copyright')
 
-#        if tags_list and isinstance(tags_list, list) and len(tags_list) > 0:
-#            tags_list = tags_list[0]  # 取出內部列表
-#        else:
-#            tags_list = []
-        
         secret_block = Secret.load("bigquery-pord")
         secret_block = secret_block.get()
         credentials_dict = json.loads(secret_block)
