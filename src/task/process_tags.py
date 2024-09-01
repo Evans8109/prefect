@@ -8,8 +8,13 @@ from google.oauth2 import service_account
 
 @task
 def process_tags(file_path):
-    secret_block = Secret.load("google-cnl-api-key")
+    secret_block = Secret.load("new-cnl-api-key")
     service_account_json = secret_block.get()
+    print(f"Retrieved Secret: {service_account_json}")
+
+    # 检查返回的是否是空值或无效数据
+    if not service_account_json:
+        raise ValueError("Secret Block is empty or not properly configured.")
     credentials_dict = json.loads(service_account_json)
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
     df = pd.read_json(file_path)
