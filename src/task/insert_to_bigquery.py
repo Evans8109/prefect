@@ -1,10 +1,3 @@
-import os
-import json
-from google.cloud import bigquery
-from google.oauth2 import service_account
-from prefect.blocks.system import Secret
-from prefect import task
-
 @task
 def insert_to_bigquery(file_path):
     try:
@@ -12,8 +5,13 @@ def insert_to_bigquery(file_path):
         with open(file_path, 'r') as file:
             data = json.load(file)
         
+        # 檢查 data 是否為列表且非空
+        if isinstance(data, list) and len(data) > 0:
+            record = data[0]
+        else:
+            raise ValueError("JSON 數據不正確或為空")
+
         # 從 JSON 中提取數據
-        record = data[0]
         date = record.get('date')
         media_type = record.get('media_type')
         title = record.get('title')
