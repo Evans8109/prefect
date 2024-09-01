@@ -1,0 +1,28 @@
+name: Deploy Code to Server
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - Dockerfile
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy and Update Code on Server
+        run: |
+          ssh -o StrictHostKeyChecking=no evans@35.236.187.167 << 'EOF'
+            cd /usr/local/prefect
+            git pull origin main
+          EOF
