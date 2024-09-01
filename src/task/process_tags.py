@@ -1,10 +1,15 @@
 import pandas as pd
 from prefect import task
 from task.google_cnl_api import google_cnl_api
+from prefect.blocks.system import Secret
 from google.cloud import translate_v2 as translate
 
 @task
 def process_tags(file_path):
+    secret_block = Secret.load("google-cnl-api-key")
+    service_account_json = secret_block.get()
+    credentials_dict = json.loads(service_account_json)
+    credentials = service_account.Credentials.from_service_account_info(credentials_dict)
     df = pd.read_json(file_path)
     
     # 确保我们处理的是所有行
@@ -13,7 +18,7 @@ def process_tags(file_path):
     all_dates = []
 
     # 初始化翻译客户端
-    translate_client = translate.Client()
+    translate_client = translate.Client(credentials=credentials)
 
     for _, row in df.iterrows():
         content_string = row['explanation']
