@@ -20,6 +20,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Check SSH agent
+        run: |
+          echo "SSH_AUTH_SOCK is: $SSH_AUTH_SOCK"
+          ls -la $SSH_AUTH_SOCK
+          ssh-add -l
+
       - name: Deploy and Update Code on Server
         run: |
           ssh -o StrictHostKeyChecking=no evans@35.236.187.167 << 'EOF'
