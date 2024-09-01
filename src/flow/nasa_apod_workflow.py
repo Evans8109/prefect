@@ -36,7 +36,7 @@ def nasa_apod_workflow(bucket_name):
 #    insert_to_tag(df_tags)
     project_id = "my-project-tir102-bigquery"
     dataset_id = "tir102_apod"
-    table_name = "tag"
+    table_name = "tags"
     column_mapping = {'date': 'date_field', 'tags_en': 'tags_en_field', 'tags_zhTW': 'tags_zhTW_field'}
 
     # Correctly call insert_to_tag
