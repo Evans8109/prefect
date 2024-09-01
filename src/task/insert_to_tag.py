@@ -13,9 +13,12 @@ def insert_to_tag(df_tags: pd.DataFrame, project_id: str, dataset_id: str, table
     if 'Row' in df_tags.columns:
         df_tags = df_tags.drop(columns=['Row'])
 
-    # 将日期转换为字符串
-    df_tags['date'] = pd.to_datetime(df_tags['date'])
-    df_tags['date'] = df_tags['date'].astype(str)
+    # 确保日期列为字符串格式 (YYYY-MM-DD)
+    if df_tags['date'].dtype == 'object':  # 如果是 'object' 类型
+        df_tags['date'] = pd.to_datetime(df_tags['date'], errors='coerce').dt.strftime('%Y-%m-%d')
+    
+    # 检查数据类型
+    print(df_tags.dtypes)
 
     # 构建完整的表 ID
     table_id = f"{project_id}.{dataset_id}.{table_name}"
@@ -28,9 +31,22 @@ def insert_to_tag(df_tags: pd.DataFrame, project_id: str, dataset_id: str, table
     # 创建 BigQuery 客户端
     client = bigquery.Client(credentials=credentials, project=project_id)
     
+    # 构造 BigQuery 表的 Schema
+    schema = [
+        bigquery.SchemaField("date", "DATE"),
+        bigquery.SchemaField("tags_en", "STRING"),
+        bigquery.SchemaField("tags_zhTW", "STRING"),
+    ]
+    
+    # 配置加载作业
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        source_format=bigquery.SourceFormat.PARQUET,  # 选择合适的格式
+    )
+    
     try:
         # 将数据加载到 BigQuery
-        job = client.load_table_from_dataframe(df_tags, table_id)
+        job = client.load_table_from_dataframe(df_tags, table_id, job_config=job_config)
         job.result()  # 等待作业完成
 
         print(f"Successfully inserted {job.output_rows} rows into BigQuery table {table_id}.")

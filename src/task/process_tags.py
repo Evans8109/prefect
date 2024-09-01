@@ -45,7 +45,7 @@ def process_tags(file_path):
     df_tags = pd.DataFrame({
         'date': all_dates,
         'tags_en': all_tags,
-        'tags_ehTW': all_translations
+        'tags_zhTW': all_translations
     })
     #data_type to date
     df_tags['date'] = pd.to_datetime(df_tags['date'])
