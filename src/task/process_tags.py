@@ -8,10 +8,12 @@ from google.oauth2 import service_account
 
 @task
 def process_tags(file_path):
+    #key載入
     secret_block = Secret.load("new-cnl-api-key")
     service_account_json = secret_block.get()
     credentials_dict = json.loads(service_account_json)
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+
     df = pd.read_json(file_path)
     
     # 确保我们处理的是所有行
@@ -45,6 +47,8 @@ def process_tags(file_path):
         'tags_en': all_tags,
         'tags_ehTW': all_translations
     })
+    #data_type to date
+    df_tags['date'] = pd.to_datetime(df_tags['date'])
 
     # 添加 Row 列
     df_tags = df_tags.reset_index(drop=True)
