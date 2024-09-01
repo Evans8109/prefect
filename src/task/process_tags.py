@@ -4,6 +4,7 @@ from prefect import task
 from task.google_cnl_api import google_cnl_api
 from prefect.blocks.system import Secret
 from google.cloud import translate_v2 as translate
+from google.oauth2 import service_account
 
 @task
 def process_tags(file_path):
