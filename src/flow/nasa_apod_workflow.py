@@ -63,5 +63,5 @@ def deploy_flow():
 if __name__ == "__main__":
     deploy_flow()
 
-    bucket_name = 'tir102_apod'
-    nasa_apod_workflow(bucket_name)
+#    bucket_name = 'tir102_apod'
+#    nasa_apod_workflow(bucket_name)
