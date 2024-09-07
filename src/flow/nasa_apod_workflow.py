@@ -57,7 +57,7 @@ def deploy_flow():
         parameters=dict(
             bucket_name='tir102_apod'
         ),
-        cron="0 3 * * *"
+        cron="0 5 * * *"
     )
 
 if __name__ == "__main__":
