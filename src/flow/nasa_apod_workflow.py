@@ -24,6 +24,7 @@ def nasa_apod_workflow(bucket_name):
 
     #upload to GCS
     upload_to_gcs(file_path, bucket_name)
+    print(type(service_account_json))
 
     # process the tags
     df_tags = process_tags(file_path)
