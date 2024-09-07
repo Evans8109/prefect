@@ -14,10 +14,8 @@ def upload_to_gcs(json_file_name, bucket_name):
     
     # 解析 JSON 為字典
     credentials_dict = json.loads(service_account_json)
-
     # 創建服務帳戶憑證
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
-    
     # 創建 gcp 客户端
     storage_client = storage.Client(credentials=credentials)
 
