@@ -9,7 +9,7 @@ import os
 @task
 def upload_to_gcs(json_file_name, bucket_name):
     
-    secret_block = Secret.load("gcs-key")
+    secret_block = Secret.load("test-gcs-key")
     service_account_json = secret_block.get()
     
     # 解析 JSON 為字典
